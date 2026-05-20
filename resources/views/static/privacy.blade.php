@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('title', 'Privacy Policy')
-@section('meta_description', 'ServiceMarket Privacy Policy - how we handle your data.')
+@section('meta_description', 'M3alem Privacy Policy - how we handle your data.')
 
 @section('content')
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

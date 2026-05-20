@@ -30,7 +30,7 @@
                     <div class="w-9 h-9 bg-gradient-to-br from-brand-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
                         <i class="fas fa-tools text-white text-sm"></i>
                     </div>
-                    <span class="text-xl font-bold" style="background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">ServiceMarket</span>
+                    <span class="text-xl font-bold" style="background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">M3alem</span>
                 </a>
             </div>
         </div>

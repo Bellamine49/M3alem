@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'ServiceMarket') - Find Trusted Local Professionals</title>
+    <title>@yield('title', 'M3alem') - Find Trusted Local Professionals</title>
     <meta name="description" content="@yield('meta_description', 'Connect with verified local professionals for all your home service needs. Quality work, fair prices, verified workers.')">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -87,7 +87,7 @@
                     <div class="w-9 h-9 bg-gradient-to-br from-brand-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-brand-500/30 transition-all group-hover:scale-105">
                         <i class="fas fa-tools text-white text-sm"></i>
                     </div>
-                    <span class="text-xl font-bold gradient-text hidden sm:block">ServiceMarket</span>
+                    <span class="text-xl font-bold gradient-text hidden sm:block">M3alem</span>
                 </a>
                 <div class="hidden md:flex items-center space-x-1">
                     <a href="{{ route('home') }}" class="px-4 py-2 rounded-lg text-sm font-medium transition-all {{ request()->routeIs('home') ? 'bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100' }}">Home</a>
@@ -221,7 +221,7 @@
                         <div class="w-9 h-9 bg-gradient-to-br from-brand-500 to-purple-500 rounded-xl flex items-center justify-center">
                             <i class="fas fa-tools text-white text-sm"></i>
                         </div>
-                        <span class="text-xl font-bold">ServiceMarket</span>
+                        <span class="text-xl font-bold">M3alem</span>
                     </div>
                     <p class="text-gray-400 text-sm leading-relaxed max-w-md">Connect with trusted local professionals for all your home service needs. Quality work, fair prices, verified workers.</p>
                 </div>
@@ -245,7 +245,7 @@
                 </div>
             </div>
             <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-500">
-                &copy; {{ date('Y') }} ServiceMarket. All rights reserved.
+                &copy; {{ date('Y') }} M3alem. All rights reserved.
             </div>
         </div>
     </footer>

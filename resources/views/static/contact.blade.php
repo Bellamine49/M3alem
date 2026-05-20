@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('title', 'Contact Us')
-@section('meta_description', 'Get in touch with ServiceMarket support team.')
+@section('meta_description', 'Get in touch with M3alem support team.')
 
 @section('content')
 <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

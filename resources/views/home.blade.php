@@ -331,7 +331,7 @@ function homeSearch() {
 <div class="bg-gradient-to-br from-gray-900 to-gray-800 py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-2xl md:text-3xl font-bold text-white">Why choose ServiceMarket?</h2>
+            <h2 class="text-2xl md:text-3xl font-bold text-white">Why choose M3alem?</h2>
             <p class="text-gray-400 mt-2">We make finding reliable help easy and safe</p>
         </div>
         <div class="grid md:grid-cols-3 gap-8" x-data="{ hoveredFeature: null }">
