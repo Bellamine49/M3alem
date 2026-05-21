@@ -84,9 +84,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <a href="{{ route('home') }}" class="flex items-center space-x-2 group">
-                    <div class="w-9 h-9 bg-gradient-to-br from-brand-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-brand-500/30 transition-all group-hover:scale-105">
-                        <i class="fas fa-tools text-white text-sm"></i>
-                    </div>
+                    <img src="/logo_M3alem_transparent.png" alt="M3alem" class="h-9 w-auto">
                     <span class="text-xl font-bold gradient-text hidden sm:block">M3alem</span>
                 </a>
                 <div class="hidden md:flex items-center space-x-1">

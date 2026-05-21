@@ -184,7 +184,7 @@
     </div>
 </div>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10" x-data="{ activeCategory: null }">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 relative z-10" x-data="{ activeCategory: null }">
     <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 animate-fade-in-up" style="animation-delay: 0.4s;">
         <h2 class="text-xl font-bold text-gray-900 mb-6">Popular Services</h2>
         <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
