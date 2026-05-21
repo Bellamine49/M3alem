@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" href="/logo_M3alem_transparent.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
         tailwind.config = {
@@ -89,9 +89,9 @@
     <nav class="fixed top-0 left-0 right-0 z-50 glass border-b border-gray-200/50 dark:border-gray-700/50 transition-all duration-300" :class="{ 'shadow-lg': window.scrollY > 10 }">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
-                <a href="{{ route('home') }}" class="flex items-center space-x-2 group">
-                    <img src="/logo_M3alem_transparent.png" alt="M3alem" class="h-9 w-auto">
-                    <span class="text-xl font-bold gradient-text hidden sm:block">M3alem</span>
+                <a href="{{ route('home') }}" class="flex items-center space-x-3 group">
+                    <img src="/logo_M3alem_transparent.png" alt="M3alem" class="h-12 w-auto">
+                    <span class="hidden sm:block text-2xl font-bold" style="font-family: 'Reem Kufi', serif; background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.02em;">M3alem</span>
                 </a>
                 <div class="hidden md:flex items-center space-x-1">
                     <a href="{{ route('home') }}" class="px-4 py-2 rounded-lg text-sm font-medium transition-all {{ request()->routeIs('home') ? 'bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100' }}">Home</a>
