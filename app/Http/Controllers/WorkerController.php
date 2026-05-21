@@ -53,7 +53,7 @@ class WorkerController extends Controller
 
         $workers = $query->paginate(12);
         $categories = Category::all();
-        $mapData = $workers->map(fn($w) => ['name' => $w->user->name, 'category' => $w->category->name, 'city' => $w->city, 'rating' => $w->rating, 'url' => route('workers.show', $w)]);
+        $mapData = $workers->map(fn($w) => ['name' => $w->user->name, 'category' => $w->category->name, 'city' => $w->city, 'rating' => $w->rating, 'url' => route('workers.show', $w)])->values()->all();
 
         return view('workers.index', compact('workers', 'categories', 'mapData'));
     }
