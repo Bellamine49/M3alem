@@ -76,6 +76,12 @@
         ::-webkit-scrollbar-thumb:hover { background: #a1a1a1; }
         .dark ::-webkit-scrollbar-track { background: #1a1a1a; }
         .dark ::-webkit-scrollbar-thumb { background: #444; }
+        .dark input:not([type="submit"]):not([type="button"]),
+        .dark textarea,
+        .dark select { background-color: #374151; color: #f3f4f6; border-color: #4b5563; }
+        .dark input:not([type="submit"]):not([type="button"]):focus,
+        .dark textarea:focus,
+        .dark select:focus { border-color: #60a5fa; outline: none; box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2); }
     </style>
     @stack('styles')
 </head>
