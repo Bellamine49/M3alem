@@ -120,7 +120,7 @@
         <div class="space-y-6">
             @auth
             @if(auth()->id() !== $worker->user_id)
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sticky top-24 space-y-6">
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 lg:sticky lg:top-24 space-y-6">
                 <div x-data="datePicker()">
                     <h3 class="font-semibold text-gray-900 mb-4">Book a Service</h3>
                     <form action="{{ route('bookings.store', $worker) }}" method="POST">
@@ -145,7 +145,7 @@
                                  x-transition:enter="transition ease-out duration-200"
                                  x-transition:enter-start="opacity-0 scale-95"
                                  x-transition:enter-end="opacity-100 scale-100"
-                                 class="absolute z-50 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+                                 class="fixed sm:absolute z-50 inset-x-4 sm:inset-x-auto sm:mt-2 sm:w-80 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
                                 
                                 <!-- Month navigation -->
                                 <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">

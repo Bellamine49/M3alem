@@ -101,15 +101,14 @@
 
     <div class="flex items-center justify-between mb-6 animate-fade-in" style="animation-delay: 0.3s;">
         <p class="text-sm text-gray-500 dark:text-gray-400"><span x-text="{{ $workers->total() }}"></span> professionals found</p>
-        <div class="flex items-center space-x-2">
-            <span class="text-sm text-gray-500 dark:text-gray-400">View:</span>
-            <button @click="viewMode = 'grid'" :class="{ 'bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400': viewMode === 'grid', 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300': viewMode !== 'grid' }" class="p-2 rounded-lg transition-all">
+        <div class="flex items-center gap-1">
+            <button @click="viewMode = 'grid'" :class="{ 'bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400': viewMode === 'grid', 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300': viewMode !== 'grid' }" class="p-2 rounded-lg transition-all" title="Grid view">
                 <i class="fas fa-th-large"></i>
             </button>
-            <button @click="viewMode = 'list'" :class="{ 'bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400': viewMode === 'list', 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300': viewMode !== 'list' }" class="p-2 rounded-lg transition-all">
+            <button @click="viewMode = 'list'" :class="{ 'bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400': viewMode === 'list', 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300': viewMode !== 'list' }" class="p-2 rounded-lg transition-all hidden sm:block" title="List view">
                 <i class="fas fa-list"></i>
             </button>
-            <button @click="viewMode = 'map'; initMap()" :class="{ 'bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400': viewMode === 'map', 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300': viewMode !== 'map' }" class="p-2 rounded-lg transition-all">
+            <button @click="viewMode = 'map'; initMap()" :class="{ 'bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400': viewMode === 'map', 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300': viewMode !== 'map' }" class="p-2 rounded-lg transition-all" title="Map view">
                 <i class="fas fa-map"></i>
             </button>
         </div>

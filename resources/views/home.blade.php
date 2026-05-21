@@ -21,40 +21,17 @@
                 <input type="hidden" name="category" :value="selectedServiceId">
                 <input type="hidden" name="min_price" :value="minPrice">
                 <input type="hidden" name="max_price" :value="maxPrice">
-                <div class="bg-white rounded-full shadow-2xl shadow-black/20 flex items-stretch h-14 transition-all duration-300" :class="{ 'ring-2 ring-brand-500/30 shadow-3xl': activeSegment }">
-                    <!-- Service -->
-                    <div class="relative flex-1 min-w-0" @click.away="closeSegment('service')">
+                <div :class="activeSegment ? 'hidden' : 'flex'" class="sm:flex bg-white rounded-full shadow-2xl shadow-black/20 items-stretch h-14 transition-all duration-300 sm:flex" :class="{ 'ring-2 ring-brand-500/30 shadow-3xl': activeSegment }">
+                    <div class="relative flex-1 min-w-0 hidden sm:block" @click.away="closeSegment('service')">
                         <button type="button" @click="toggleSegment('service')" 
                                 class="w-full h-full px-5 text-left rounded-l-full transition-colors hover:bg-gray-50"
                                 :class="{ 'bg-gray-50': activeSegment === 'service' }">
                             <p class="text-[10px] font-bold text-gray-900 tracking-wide uppercase">Service</p>
                             <p class="text-sm text-gray-500 truncate mt-0.5" x-text="selectedService || 'Search services'"></p>
                         </button>
-                        <div x-show="activeSegment === 'service'" x-cloak
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 scale-95"
-                             x-transition:enter-end="opacity-100 scale-100"
-                             class="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                            <div class="p-4 max-h-80 overflow-y-auto">
-                                <div class="grid grid-cols-2 gap-2">
-                                    <template x-for="suggestion in suggestions" :key="suggestion.id">
-                                        <button type="button" @click="selectService(suggestion)"
-                                                class="flex flex-col items-center p-3 rounded-xl hover:bg-gray-50 transition-all text-center group"
-                                                :class="{ 'bg-brand-50 ring-2 ring-brand-500/20': selectedServiceId == suggestion.id }">
-                                            <div class="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center text-xl mb-2 group-hover:scale-110 transition-transform" x-text="suggestion.icon || ''"></div>
-                                            <p class="text-xs font-medium text-gray-900 leading-tight" x-text="suggestion.name"></p>
-                                            <p class="text-[10px] text-gray-400 mt-0.5" x-text="suggestion.count + ' workers'"></p>
-                                        </button>
-                                    </template>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-
-                    <div class="w-px bg-gray-200 my-3 flex-shrink-0" x-show="activeSegment !== 'service'"></div>
-
-                    <!-- City -->
-                    <div class="relative flex-1 min-w-0" @click.away="closeSegment('city')">
+                    <div class="w-px bg-gray-200 my-3 flex-shrink-0 hidden sm:block" x-show="activeSegment !== 'service'"></div>
+                    <div class="relative flex-1 min-w-0 hidden sm:block" @click.away="closeSegment('city')">
                         <button type="button" @click="toggleSegment('city')" 
                                 class="w-full h-full px-5 text-left transition-colors hover:bg-gray-50"
                                 :class="{ 'bg-gray-50': activeSegment === 'city' }">
@@ -62,103 +39,145 @@
                             <p class="text-sm text-gray-500 truncate mt-0.5" x-text="selectedCity || 'Where?'"></p>
                             <input type="hidden" name="city" :value="selectedCity">
                         </button>
-                        <div x-show="activeSegment === 'city'" x-cloak
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 scale-95"
-                             x-transition:enter-end="opacity-100 scale-100"
-                             class="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                            <div class="p-3">
-                                <div class="relative mb-3">
-                                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                                    <input type="text" x-model="citySearch" placeholder="Search city..." 
-                                           class="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500">
-                                </div>
-                                <div class="max-h-48 overflow-y-auto">
-                                    <button type="button" @click="selectedCity = ''; activeSegment = null" 
-                                            class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors"
-                                            :class="{ 'bg-brand-50 text-brand-700': selectedCity === '' }">
-                                        <i class="fas fa-globe text-gray-400"></i>
-                                        <span class="text-sm font-medium">All cities</span>
-                                    </button>
-                                    <template x-for="city in filteredCities" :key="city">
-                                        <button type="button" @click="selectedCity = city; activeSegment = null" 
-                                                class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors"
-                                                :class="{ 'bg-brand-50 text-brand-700': selectedCity === city }">
-                                            <i class="fas fa-map-marker-alt text-brand-500"></i>
-                                            <span class="text-sm font-medium flex-1" x-text="city"></span>
-                                            <i class="fas fa-check text-brand-600 text-xs" x-show="selectedCity === city"></i>
-                                        </button>
-                                    </template>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-
-                    <div class="w-px bg-gray-200 my-3 flex-shrink-0" x-show="activeSegment !== 'city'"></div>
-
-                    <!-- Budget -->
-                    <div class="relative flex-1 min-w-0" @click.away="closeSegment('budget')">
+                    <div class="w-px bg-gray-200 my-3 flex-shrink-0 hidden sm:block" x-show="activeSegment !== 'city'"></div>
+                    <div class="relative flex-1 min-w-0 hidden sm:block" @click.away="closeSegment('budget')">
                         <button type="button" @click="toggleSegment('budget')" 
                                 class="w-full h-full px-5 text-left transition-colors hover:bg-gray-50"
                                 :class="{ 'bg-gray-50': activeSegment === 'budget' }">
                             <p class="text-[10px] font-bold text-gray-900 tracking-wide uppercase">Budget</p>
                             <p class="text-sm text-gray-500 truncate mt-0.5" x-text="budgetDisplay"></p>
                         </button>
-                        <div x-show="activeSegment === 'budget'" x-cloak
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 scale-95"
-                             x-transition:enter-end="opacity-100 scale-100"
-                             class="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 w-80">
-                            <div class="p-5">
-                                <p class="text-sm font-semibold text-gray-900 mb-4">Price range</p>
-                                
-                                <!-- Histogram bars -->
-                                <div class="flex items-end justify-between h-16 mb-4 px-1">
-                                    <template x-for="(bar, i) in histogramBars" :key="i">
-                                        <div class="flex flex-col items-center gap-1 flex-1">
-                                            <div class="w-full rounded-t transition-all" 
-                                                 :class="bar.active ? 'bg-brand-600' : 'bg-gray-200'"
-                                                 :style="'height: ' + bar.height + '%'"
-                                                 @click="setBudgetFromBar(bar.min, bar.max)">
-                                            </div>
-                                            <span class="text-[9px] text-gray-400" x-text="bar.label"></span>
-                                        </div>
-                                    </template>
-                                </div>
-                                
-                                <!-- Range inputs -->
-                                <div class="flex items-center gap-3 mb-4">
-                                    <div class="flex-1">
-                                        <label class="text-[10px] font-semibold text-gray-500 uppercase">Min</label>
-                                        <input type="number" x-model.number="minPrice" :min="0" :max="maxPrice" 
-                                               class="w-full mt-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-center focus:ring-2 focus:ring-brand-500">
-                                    </div>
-                                    <span class="text-gray-300 mt-4">—</span>
-                                    <div class="flex-1">
-                                        <label class="text-[10px] font-semibold text-gray-500 uppercase">Max</label>
-                                        <input type="number" x-model.number="maxPrice" :min="minPrice" 
-                                               class="w-full mt-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-center focus:ring-2 focus:ring-brand-500">
-                                    </div>
-                                </div>
-                                
-                                <!-- Quick presets -->
-                                <div class="flex gap-2">
-                                    <template x-for="preset in budgetPresets" :key="preset.label">
-                                        <button type="button" @click="minPrice = preset.min; maxPrice = preset.max"
-                                                class="flex-1 px-2 py-1.5 text-xs font-medium rounded-lg transition-all"
-                                                :class="minPrice === preset.min && maxPrice === preset.max ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
-                                                x-text="preset.label">
-                                        </button>
-                                    </template>
-                                </div>
-                            </div>
+                    </div>
+                    <button type="submit" class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-brand-600 rounded-full text-white hover:bg-brand-700 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-brand-500/30 my-auto mr-1 flex-shrink-0">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                {{-- Mobile: stacked compact --}}
+                <div x-show="activeSegment === null" class="sm:hidden flex gap-2 mt-3">
+                    <button type="button" @click="toggleSegment('service')" 
+                            class="flex-1 flex items-center gap-2 px-4 py-2.5 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white text-sm font-medium">
+                        <i class="fas fa-search text-brand-300 text-xs"></i>
+                        <span class="truncate" x-text="selectedService || 'Service'"></span>
+                    </button>
+                    <button type="button" @click="toggleSegment('city')" 
+                            class="flex-1 flex items-center gap-2 px-4 py-2.5 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white text-sm font-medium">
+                        <i class="fas fa-map-marker-alt text-brand-300 text-xs"></i>
+                        <span class="truncate" x-text="selectedCity || 'City'"></span>
+                    </button>
+                    <button type="button" @click="toggleSegment('budget')" 
+                            class="flex-1 flex items-center gap-2 px-4 py-2.5 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white text-sm font-medium">
+                        <i class="fas fa-tag text-brand-300 text-xs"></i>
+                        <span class="truncate" x-text="budgetDisplay === 'Any price' ? 'Budget' : budgetDisplay"></span>
+                    </button>
+                    <button type="submit" class="flex items-center justify-center w-11 h-11 bg-brand-500 rounded-xl text-white">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                {{-- Mobile search button bar --}}
+                <div x-show="activeSegment !== null" class="sm:hidden flex gap-2 mt-3">
+                    <button type="button" @click="activeSegment = null" class="px-4 py-2.5 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white/80 text-sm">
+                        <i class="fas fa-chevron-left mr-1"></i>Back
+                    </button>
+                    <button type="submit" class="flex-1 bg-brand-500 text-white py-2.5 rounded-xl font-semibold text-sm">
+                        <i class="fas fa-search mr-1"></i>Search
+                    </button>
+                </div>
+
+                {{-- Service dropdown --}}
+                <div x-show="activeSegment === 'service'" x-cloak
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 translate-y-2"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     class="mt-3 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+                    <div class="p-4 max-h-72 overflow-y-auto">
+                        <div class="grid grid-cols-2 gap-2">
+                            <template x-for="suggestion in suggestions" :key="suggestion.id">
+                                <button type="button" @click="selectService(suggestion)"
+                                        class="flex flex-col items-center p-3 rounded-xl hover:bg-gray-50 transition-all text-center"
+                                        :class="{ 'bg-brand-50 ring-2 ring-brand-500/20': selectedServiceId == suggestion.id }">
+                                    <div class="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center text-xl mb-2" x-text="suggestion.icon || ''"></div>
+                                    <p class="text-xs font-medium text-gray-900 leading-tight" x-text="suggestion.name"></p>
+                                    <p class="text-[10px] text-gray-400 mt-0.5" x-text="suggestion.count + ' workers'"></p>
+                                </button>
+                            </template>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Search button -->
-                    <button type="submit" class="flex items-center justify-center w-12 h-12 bg-brand-600 rounded-full text-white hover:bg-brand-700 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-brand-500/30 my-auto mr-1.5 flex-shrink-0">
-                        <i class="fas fa-search text-sm"></i>
-                    </button>
+                {{-- City dropdown --}}
+                <div x-show="activeSegment === 'city'" x-cloak
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 translate-y-2"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     class="mt-3 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+                    <div class="p-3">
+                        <div class="relative mb-3">
+                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                            <input type="text" x-model="citySearch" placeholder="Search city..." 
+                                   class="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500">
+                        </div>
+                        <div class="max-h-48 overflow-y-auto">
+                            <button type="button" @click="selectedCity = ''; activeSegment = null" 
+                                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors"
+                                    :class="{ 'bg-brand-50 text-brand-700': selectedCity === '' }">
+                                <i class="fas fa-globe text-gray-400"></i>
+                                <span class="text-sm font-medium">All cities</span>
+                            </button>
+                            <template x-for="city in filteredCities" :key="city">
+                                <button type="button" @click="selectedCity = city; activeSegment = null" 
+                                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors"
+                                        :class="{ 'bg-brand-50 text-brand-700': selectedCity === city }">
+                                    <i class="fas fa-map-marker-alt text-brand-500"></i>
+                                    <span class="text-sm font-medium flex-1" x-text="city"></span>
+                                    <i class="fas fa-check text-brand-600 text-xs" x-show="selectedCity === city"></i>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Budget dropdown --}}
+                <div x-show="activeSegment === 'budget'" x-cloak
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 translate-y-2"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     class="mt-3 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+                    <div class="p-4">
+                        <p class="text-sm font-semibold text-gray-900 mb-3">Price range</p>
+                        <div class="flex items-end justify-between h-14 mb-3 gap-1">
+                            <template x-for="(bar, i) in histogramBars" :key="i">
+                                <div class="flex flex-col items-center gap-1 flex-1">
+                                    <div class="w-full rounded-t transition-all" 
+                                         :class="bar.active ? 'bg-brand-600' : 'bg-gray-200'"
+                                         :style="'height: ' + bar.height + '%'"
+                                         @click="setBudgetFromBar(bar.min, bar.max)">
+                                    </div>
+                                    <span class="text-[9px] text-gray-400" x-text="bar.label"></span>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="flex-1">
+                                <input type="number" x-model.number="minPrice" :min="0" :max="maxPrice" placeholder="Min"
+                                       class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-center focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <span class="text-gray-300">—</span>
+                            <div class="flex-1">
+                                <input type="number" x-model.number="maxPrice" :min="minPrice" placeholder="Max"
+                                       class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-center focus:ring-2 focus:ring-brand-500">
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <template x-for="preset in budgetPresets" :key="preset.label">
+                                <button type="button" @click="minPrice = preset.min; maxPrice = preset.max"
+                                        class="flex-1 px-2 py-1.5 text-xs font-medium rounded-lg transition-all"
+                                        :class="minPrice === preset.min && maxPrice === preset.max ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+                                        x-text="preset.label">
+                                </button>
+                            </template>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

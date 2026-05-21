@@ -152,7 +152,7 @@
         </div>
     </nav>
 
-    <main class="pt-16 page-transition min-h-screen">
+    <main class="pt-16 page-transition min-h-screen pb-24 md:pb-0">
         @if(session('success'))
             <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
                 <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 px-4 py-3 rounded-xl flex items-center justify-between">
