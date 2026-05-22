@@ -81,6 +81,27 @@
                         <p class="text-gray-600 leading-relaxed">{{ $worker->bio }}</p>
                     </div>
                     @endif
+
+                    @if($worker->photos->isNotEmpty())
+                    <div class="mt-6">
+                        <h3 class="font-semibold text-gray-900 mb-3">Work Photos ({{ $worker->photos->count() }})</h3>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            @foreach($worker->photos as $photo)
+                            <div class="relative group rounded-xl overflow-hidden bg-gray-100">
+                                <img src="{{ $photo->url }}" alt="{{ $photo->caption ?? 'Work photo' }}" class="w-full h-40 object-cover">
+                                @if($photo->caption)
+                                <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+                                    <p class="text-white text-xs">{{ $photo->caption }}</p>
+                                </div>
+                                @endif
+                                @if($photo->is_primary)
+                                <span class="absolute top-2 left-2 bg-brand-600 text-white text-[10px] px-2 py-0.5 rounded-full font-semibold">Primary</span>
+                                @endif
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
 
@@ -123,12 +144,11 @@
             <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 lg:sticky lg:top-24 space-y-6">
                 <div x-data="datePicker()">
                     <h3 class="font-semibold text-gray-900 mb-4">Book a Service</h3>
+                    <p class="text-sm text-gray-500 mb-4">Price: <strong>{{ $worker->price_per_unit }}</strong> / {{ str_replace('_', ' ', $worker->price_unit) }}</p>
                     <form action="{{ route('bookings.store', $worker) }}" method="POST">
                         @csrf
                         <div class="mb-4">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Select Date</label>
-                            
-                            <!-- Date picker trigger -->
                             <button type="button" @click="calendarOpen = !calendarOpen" 
                                     class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl hover:border-gray-300 transition-all text-left"
                                     :class="{ 'border-brand-500 ring-2 ring-brand-500/20': calendarOpen }">
@@ -140,14 +160,12 @@
                             </button>
                             <input type="hidden" name="booking_date" :value="selectedDateValue">
                             
-                            <!-- Calendar dropdown -->
                             <div x-show="calendarOpen" x-cloak
                                  x-transition:enter="transition ease-out duration-200"
                                  x-transition:enter-start="opacity-0 scale-95"
                                  x-transition:enter-end="opacity-100 scale-100"
                                  class="fixed sm:absolute z-50 inset-x-4 sm:inset-x-auto sm:mt-2 sm:w-80 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
                                 
-                                <!-- Month navigation -->
                                 <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
                                     <button type="button" @click="prevMonth()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
                                         <i class="fas fa-chevron-left text-gray-600 text-sm"></i>
@@ -158,14 +176,12 @@
                                     </button>
                                 </div>
                                 
-                                <!-- Weekday headers -->
                                 <div class="grid grid-cols-7 px-3 py-2">
                                     <template x-for="day in ['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di']" :key="day">
                                         <div class="text-center text-xs font-medium text-gray-400 py-1" x-text="day"></div>
                                     </template>
                                 </div>
                                 
-                                <!-- Calendar grid -->
                                 <div class="grid grid-cols-7 px-3 pb-3">
                                     <template x-for="(day, index) in calendarDays" :key="index">
                                         <button type="button" 
@@ -183,7 +199,6 @@
                                     </template>
                                 </div>
                                 
-                                <!-- Flexible dates -->
                                 <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
                                     <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Flexible</p>
                                     <div class="flex gap-1.5">
@@ -197,6 +212,15 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Your Proposed Price (optional)</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-sm">{{ $worker->price_unit === 'per_hour' ? 'MAD/h' : ($worker->price_unit === 'per_day' ? 'MAD/day' : 'MAD') }}</span>
+                                <input type="number" name="proposed_price" step="0.01" min="0" class="w-full pl-16 pr-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm" placeholder="{{ $worker->price_per_unit }}">
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1">Leave empty to use the worker's listed price ({{ $worker->price_per_unit }})</p>
                         </div>
                         
                         <div class="mb-4">

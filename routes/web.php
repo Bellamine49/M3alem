@@ -54,6 +54,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/workers/{worker}/favorite', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::post('/push/subscribe', [\App\Http\Controllers\PushSubscriptionController::class, 'store'])->name('push.subscribe');
+    Route::delete('/push/unsubscribe', [\App\Http\Controllers\PushSubscriptionController::class, 'destroy'])->name('push.unsubscribe');
+
+    Route::post('/workers/{worker}/photos', [\App\Http\Controllers\WorkerPhotoController::class, 'store'])->name('worker.photos.store');
+    Route::delete('/photos/{photo}', [\App\Http\Controllers\WorkerPhotoController::class, 'destroy'])->name('worker.photos.destroy');
+    Route::patch('/photos/{photo}/primary', [\App\Http\Controllers\WorkerPhotoController::class, 'setPrimary'])->name('worker.photos.primary');
+
+    Route::post('/bookings/{booking}/counter-offer', [\App\Http\Controllers\BookingController::class, 'counterOffer'])->name('bookings.counterOffer');
+    Route::post('/bookings/{booking}/accept-price', [\App\Http\Controllers\BookingController::class, 'acceptPrice'])->name('bookings.acceptPrice');
+
+    Route::post('/bookings/{booking}/payment/intent', [\App\Http\Controllers\PaymentController::class, 'createIntent'])->name('payment.intent');
+    Route::post('/bookings/{booking}/payment/confirm', [\App\Http\Controllers\PaymentController::class, 'confirm'])->name('payment.confirm');
+    Route::get('/payments', [\App\Http\Controllers\PaymentController::class, 'history'])->name('payments.index');
+});
+
 Route::get('/about', function () { return view('static.about'); })->name('about');
 Route::get('/contact', function () { return view('static.contact'); })->name('contact');
 Route::get('/privacy', function () { return view('static.privacy'); })->name('privacy');

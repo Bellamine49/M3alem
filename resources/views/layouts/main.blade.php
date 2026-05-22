@@ -130,6 +130,7 @@
                     </button>
                     @auth
                         <a href="{{ route('dashboard') }}" class="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors hidden sm:block">Dashboard</a>
+                        <a href="{{ route('payments.index') }}" class="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors hidden sm:block"><i class="fas fa-credit-card mr-1"></i>Payments</a>
                         <div class="w-9 h-9 bg-gradient-to-br from-brand-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md cursor-pointer hover:scale-110 transition-transform" @click="mobileMenu = !mobileMenu">
                             {{ substr(auth()->user()->name, 0, 1) }}
                         </div>
@@ -215,10 +216,10 @@
                 <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                 @endif
             </a>
-            <a href="{{ route('dashboard') }}" class="flex flex-col items-center p-2 rounded-lg {{ request()->routeIs('dashboard') ? 'text-brand-600 dark:text-brand-400' : 'text-gray-500 dark:text-gray-400' }}">
-                <i class="fas fa-user text-lg"></i>
-                <span class="text-[10px] mt-0.5 font-medium">Profile</span>
-            </a>
+                        <a href="{{ route('payments.index') }}" class="flex flex-col items-center p-2 rounded-lg {{ request()->routeIs('payments.*') ? 'text-brand-600 dark:text-brand-400' : 'text-gray-500 dark:text-gray-400' }}">
+                            <i class="fas fa-credit-card text-lg"></i>
+                            <span class="text-[10px] mt-0.5 font-medium">Payments</span>
+                        </a>
             @else
             <a href="{{ route('login') }}" class="flex flex-col items-center p-2 rounded-lg text-gray-500 dark:text-gray-400">
                 <i class="fas fa-user text-lg"></i>
@@ -267,7 +268,32 @@
 
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js');
+            navigator.serviceWorker.register('/sw.js').then(reg => {
+                if ('PushManager' in window && '{{ auth()->check() }}' === '1') {
+                    reg.pushManager.getSubscription().then(sub => {
+                        if (!sub) {
+                            Notification.requestPermission().then(perm => {
+                                if (perm === 'granted') {
+                                    reg.pushManager.subscribe({
+                                        userVisibleOnly: true,
+                                        applicationServerKey: '{{ config('webpush.vapid.public_key') }}'
+                                    }).then(sub => {
+                                        fetch('{{ route('push.subscribe') }}', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                                            body: JSON.stringify({
+                                                endpoint: sub.endpoint,
+                                                auth_key: sub.toJSON().keys?.auth || '',
+                                                p256dh_key: sub.toJSON().keys?.p256dh || '',
+                                            })
+                                        });
+                                    }).catch(() => {});
+                                }
+                            });
+                        }
+                    });
+                }
+            });
         }
         if (window.navigator.standalone) {
             document.documentElement.classList.add('pwa-mode');

@@ -94,6 +94,51 @@
         </form>
     </div>
 
+    @if($workerProfile)
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-6">Work Photos</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+            @forelse($workerProfile->photos as $photo)
+            <div class="relative group rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
+                <img src="{{ $photo->url }}" alt="{{ $photo->caption ?? 'Photo' }}" class="w-full h-32 object-cover">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
+                    <form action="{{ route('worker.photos.primary', $photo) }}" method="POST" class="inline">
+                        @csrf @method('PATCH')
+                        <button type="submit" class="bg-white text-gray-900 text-xs px-2 py-1 rounded-lg font-medium shadow {{ $photo->is_primary ? 'ring-2 ring-brand-500' : '' }}"><i class="fas fa-star mr-1"></i>{{ $photo->is_primary ? 'Primary' : 'Set' }}</button>
+                    </form>
+                    <form action="{{ route('worker.photos.destroy', $photo) }}" method="POST" class="inline" onsubmit="return confirm('Remove this photo?')">
+                        @csrf @method('DELETE')
+                        <button type="submit" class="bg-red-500 text-white text-xs px-2 py-1 rounded-lg font-medium"><i class="fas fa-trash"></i></button>
+                    </form>
+                </div>
+                @if($photo->is_primary)
+                <span class="absolute top-1 left-1 bg-brand-600 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">Primary</span>
+                @endif
+            </div>
+            @empty
+            <div class="col-span-full text-center py-8 text-gray-400">
+                <i class="fas fa-camera text-2xl mb-2"></i>
+                <p class="text-sm">No photos yet. Upload your work samples!</p>
+            </div>
+            @endforelse
+        </div>
+        <form action="{{ route('worker.photos.store', $workerProfile) }}" method="POST" enctype="multipart/form-data" class="flex items-end gap-4">
+            @csrf
+            <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Add Photo</label>
+                <input type="file" name="photo" accept="image/*" required class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100">
+            </div>
+            <div class="w-40">
+                <input type="text" name="caption" placeholder="Caption (optional)" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm">
+            </div>
+            <label class="flex items-center gap-2 text-sm text-gray-600 whitespace-nowrap">
+                <input type="checkbox" name="is_primary" value="1"> Primary
+            </label>
+            <button type="submit" class="bg-brand-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-brand-700"><i class="fas fa-upload mr-1"></i>Upload</button>
+        </form>
+    </div>
+    @endif
+
     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
         <h2 class="text-xl font-semibold text-gray-900 mb-6">Change Password</h2>
         <form method="POST" action="{{ route('password.update') }}">

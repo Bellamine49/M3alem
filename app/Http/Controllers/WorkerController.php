@@ -60,7 +60,7 @@ class WorkerController extends Controller
 
     public function show(WorkerProfile $worker)
     {
-        $worker->load(['user', 'category', 'reviews.user']);
+        $worker->load(['user', 'category', 'reviews.user', 'photos']);
         $relatedWorkers = WorkerProfile::where('category_id', $worker->category_id)
             ->where('id', '!=', $worker->id)
             ->with('user')

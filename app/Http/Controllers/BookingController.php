@@ -14,6 +14,7 @@ class BookingController extends Controller
         $request->validate([
             'booking_date' => 'required|date|after_or_equal:today',
             'notes' => 'nullable|string|max:500',
+            'proposed_price' => 'nullable|numeric|min:0',
         ]);
 
         $exists = Booking::where('worker_profile_id', $worker->id)
@@ -25,12 +26,16 @@ class BookingController extends Controller
             return back()->withErrors(['booking_date' => 'This date is already booked. Please choose another.']);
         }
 
+        $priceStatus = $request->filled('proposed_price') ? 'client_proposed' : 'none';
+
         Booking::create([
             'client_id' => Auth::id(),
             'worker_profile_id' => $worker->id,
             'booking_date' => $request->booking_date,
             'status' => 'pending',
             'notes' => $request->notes,
+            'proposed_price' => $request->proposed_price,
+            'price_status' => $priceStatus,
         ]);
 
         return back()->with('success', 'Booking request sent! The worker will confirm shortly.');
@@ -47,6 +52,33 @@ class BookingController extends Controller
                 ->with('workerProfile.user')->orderByDesc('created_at')->get();
         }
         return view('bookings.index', compact('bookings'));
+    }
+
+    public function counterOffer(Request $request, Booking $booking)
+    {
+        $user = Auth::user();
+        $isWorker = $user->workerProfile && $booking->worker_profile_id === $user->workerProfile->id;
+        abort_unless($isWorker, 403);
+
+        $request->validate(['counter_price' => 'required|numeric|min:0']);
+
+        $booking->update([
+            'counter_price' => $request->counter_price,
+            'price_status' => 'worker_countered',
+        ]);
+
+        return back()->with('success', 'Counter offer sent to client.');
+    }
+
+    public function acceptPrice(Request $request, Booking $booking)
+    {
+        if ($booking->client_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $booking->update(['price_status' => 'accepted']);
+
+        return back()->with('success', 'Price accepted! Proceed to payment.');
     }
 
     public function updateStatus(Request $request, Booking $booking)

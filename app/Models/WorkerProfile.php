@@ -24,6 +24,21 @@ class WorkerProfile extends Model
         'total_reviews',
     ];
 
+    public function photos()
+    {
+        return $this->hasMany(WorkerPhoto::class);
+    }
+
+    public function primaryPhoto()
+    {
+        return $this->hasOne(WorkerPhoto::class)->where('is_primary', true);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     protected $casts = [
         'is_available' => 'boolean',
         'is_verified' => 'boolean',

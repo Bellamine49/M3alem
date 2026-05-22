@@ -1,4 +1,4 @@
-const CACHE = 'm3alem-v1';
+const CACHE = 'm3alem-v2';
 const STATIC = [
     '/', '/categories', '/workers',
     '/icon-192x192.png', '/icon-512x512.png',
@@ -22,7 +22,7 @@ self.addEventListener('fetch', e => {
     const { request } = e;
     if (request.method !== 'GET') return;
     if (request.url.includes('/login') || request.url.includes('/register')) {
-        e.respondWith(networkOrCache(request));
+        e.respondWith(fetch(request).catch(() => caches.match(request)));
         return;
     }
     e.respondWith(
@@ -39,6 +39,25 @@ self.addEventListener('fetch', e => {
     );
 });
 
-function networkOrCache(req) {
-    return fetch(req).catch(() => caches.match(req));
-}
+self.addEventListener('push', e => {
+    let data = { title: 'M3alem', body: 'New notification', icon: '/icon-192x192.png' };
+    if (e.data) {
+        try { data = { ...data, ...e.data.json() }; } catch (_) { data.body = e.data.text(); }
+    }
+    e.waitUntil(
+        self.registration.showNotification(data.title, {
+            body: data.body,
+            icon: data.icon || '/icon-192x192.png',
+            badge: '/icon-192x192.png',
+            vibrate: [200, 100, 200],
+            data: data.data || {},
+            actions: data.actions || [],
+        })
+    );
+});
+
+self.addEventListener('notificationclick', e => {
+    e.notification.close();
+    const url = e.notification.data?.url || '/';
+    e.waitUntil(clients.openWindow(url));
+});

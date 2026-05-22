@@ -9,9 +9,14 @@ class Booking extends Model
     protected $fillable = [
         'client_id', 'worker_profile_id',
         'booking_date', 'status', 'notes',
+        'proposed_price', 'counter_price', 'price_status',
     ];
 
-    protected $casts = ['booking_date' => 'date'];
+    protected $casts = [
+        'booking_date' => 'date',
+        'proposed_price' => 'decimal:2',
+        'counter_price' => 'decimal:2',
+    ];
 
     public function client()
     {
@@ -21,5 +26,10 @@ class Booking extends Model
     public function workerProfile()
     {
         return $this->belongsTo(WorkerProfile::class);
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
     }
 }
