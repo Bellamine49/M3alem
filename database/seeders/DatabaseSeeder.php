@@ -141,11 +141,11 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        User::create([
-            'name' => 'Test Client',
-            'email' => 'client@test.com',
-            'password' => Hash::make('password'),
-            'role' => 'client',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'client@test.com'],
+            ['name' => 'Test Client', 'password' => Hash::make('password'), 'role' => 'client']
+        );
+
+        $this->call(FakeWorkerSeeder::class);
     }
 }
