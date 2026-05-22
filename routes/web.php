@@ -65,10 +65,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/bookings/{booking}/counter-offer', [\App\Http\Controllers\BookingController::class, 'counterOffer'])->name('bookings.counterOffer');
     Route::post('/bookings/{booking}/accept-price', [\App\Http\Controllers\BookingController::class, 'acceptPrice'])->name('bookings.acceptPrice');
 
+    Route::get('/bookings/{booking}/payment/checkout', [\App\Http\Controllers\PaymentController::class, 'checkout'])->name('payment.checkout');
     Route::post('/bookings/{booking}/payment/intent', [\App\Http\Controllers\PaymentController::class, 'createIntent'])->name('payment.intent');
-    Route::post('/bookings/{booking}/payment/confirm', [\App\Http\Controllers\PaymentController::class, 'confirm'])->name('payment.confirm');
+    Route::get('/bookings/{booking}/payment/success', [\App\Http\Controllers\PaymentController::class, 'success'])->name('payment.success');
     Route::get('/payments', [\App\Http\Controllers\PaymentController::class, 'history'])->name('payments.index');
 });
+
+Route::post('/stripe/webhook', [\App\Http\Controllers\PaymentController::class, 'webhook'])->name('stripe.webhook');
 
 Route::get('/about', function () { return view('static.about'); })->name('about');
 Route::get('/contact', function () { return view('static.contact'); })->name('contact');

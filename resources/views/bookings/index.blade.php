@@ -74,12 +74,9 @@
                     @endif
                     @if($booking->price_status === 'accepted' && !$booking->payment)
                     <div class="mt-2">
-                        <div x-data="paymentHandler('{{ route('payment.intent', $booking) }}', '{{ route('payment.confirm', $booking) }}')">
-                            <button @click="pay" :disabled="loading" class="w-full bg-gradient-to-r from-brand-600 to-brand-700 text-white text-xs px-4 py-2 rounded-lg font-semibold hover:from-brand-700 hover:to-brand-800 transition-all shadow-sm" :class="{ 'opacity-50': loading }">
-                                <i class="fas fa-credit-card mr-1"></i><span x-text="loading ? 'Processing...' : 'Pay Now'"></span>
-                            </button>
-                            <div x-show="error" x-cloak x-text="error" class="text-red-500 text-xs mt-1"></div>
-                        </div>
+                        <a href="{{ route('payment.checkout', $booking) }}" class="inline-block w-full bg-gradient-to-r from-brand-600 to-brand-700 text-white text-xs px-4 py-2 rounded-lg font-semibold hover:from-brand-700 hover:to-brand-800 transition-all shadow-sm text-center">
+                            <i class="fas fa-credit-card mr-1"></i>Pay Now
+                        </a>
                     </div>
                     @endif
                     @if($booking->payment && $booking->payment->status === 'paid')
@@ -120,27 +117,4 @@
     </div>
     @endif
 </div>
-<script>
-function paymentHandler(intentUrl, confirmUrl) {
-    return {
-        loading: false,
-        error: '',
-        async pay() {
-            this.loading = true;
-            this.error = '';
-            try {
-                const res = await fetch(intentUrl, { method: 'POST', headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' } });
-                const data = await res.json();
-                if (data.clientSecret) {
-                    window.location.href = confirmUrl;
-                }
-            } catch (e) {
-                this.error = 'Payment failed. Try again.';
-            } finally {
-                this.loading = false;
-            }
-        }
-    }
-}
-</script>
 @endsection
