@@ -1,36 +1,44 @@
-const CACHE_NAME = 'm3alem-v1';
-const urlsToCache = [
-    '/',
-    '/categories',
-    '/workers',
+const CACHE = 'm3alem-v1';
+const STATIC = [
+    '/', '/categories', '/workers',
+    '/icon-192x192.png', '/icon-512x512.png',
     '/logo_M3alem_transparent.png',
 ];
 
-self.addEventListener('install', event => {
-    event.waitUntil(
-        caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
-    );
+self.addEventListener('install', e => {
+    self.skipWaiting();
+    e.waitUntil(caches.open(CACHE).then(c => c.addAll(STATIC)));
 });
 
-self.addEventListener('fetch', event => {
-    event.respondWith(
-        caches.match(event.request).then(response =>
-            response || fetch(event.request).then(fetchResponse => {
-                return caches.open(CACHE_NAME).then(cache => {
-                    if (event.request.method === 'GET') {
-                        cache.put(event.request, fetchResponse.clone());
-                    }
-                    return fetchResponse;
-                });
-            })
-        )
-    );
-});
-
-self.addEventListener('activate', event => {
-    event.waitUntil(
-        caches.keys().then(names => Promise.all(
-            names.filter(name => name !== CACHE_NAME).map(name => caches.delete(name))
+self.addEventListener('activate', e => {
+    e.waitUntil(
+        caches.keys().then(keys => Promise.all(
+            keys.filter(k => k !== CACHE).map(k => caches.delete(k))
         ))
     );
 });
+
+self.addEventListener('fetch', e => {
+    const { request } = e;
+    if (request.method !== 'GET') return;
+    if (request.url.includes('/login') || request.url.includes('/register')) {
+        e.respondWith(networkOrCache(request));
+        return;
+    }
+    e.respondWith(
+        caches.match(request).then(cached => {
+            const fetchPromise = fetch(request).then(res => {
+                if (res.ok) {
+                    const clone = res.clone();
+                    caches.open(CACHE).then(c => c.put(request, clone));
+                }
+                return res;
+            }).catch(() => cached);
+            return cached || fetchPromise;
+        })
+    );
+});
+
+function networkOrCache(req) {
+    return fetch(req).catch(() => caches.match(req));
+}

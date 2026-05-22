@@ -6,12 +6,18 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'M3alem') - Find Trusted Local Professionals</title>
     <meta name="description" content="@yield('meta_description', 'Connect with verified local professionals for all your home service needs. Quality work, fair prices, verified workers.')">
-    <link rel="icon" type="image/png" href="/logo_M3alem_transparent.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512x512.png">
     <link rel="manifest" href="/manifest.json">
-    <link rel="apple-touch-icon" href="/logo_M3alem_transparent.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="/icon-512x512.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="M3alem">
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#1e3a8a" media="(prefers-color-scheme: dark)">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="M3alem">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
@@ -262,6 +268,9 @@
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js');
+        }
+        if (window.navigator.standalone) {
+            document.documentElement.classList.add('pwa-mode');
         }
     </script>
     <script>
