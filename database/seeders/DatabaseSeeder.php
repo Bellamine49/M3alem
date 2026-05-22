@@ -101,44 +101,41 @@ class DatabaseSeeder extends Seeder
         foreach ($workers as $w) {
             $category = Category::where('name', $w['category'])->first();
             
-            $user = User::create([
-                'name' => $w['name'],
-                'email' => $w['email'],
-                'password' => Hash::make('password'),
-                'role' => 'worker',
-            ]);
+            $user = User::firstOrCreate(
+                ['email' => $w['email']],
+                ['name' => $w['name'], 'password' => Hash::make('password'), 'role' => 'worker']
+            );
+            if ($user->wasRecentlyCreated) {
+                $profile = WorkerProfile::create([
+                    'user_id' => $user->id,
+                    'category_id' => $category->id,
+                    'phone' => $w['phone'],
+                    'bio' => $w['bio'],
+                    'price_per_unit' => $w['price'],
+                    'price_unit' => $w['unit'],
+                    'city' => $w['city'],
+                    'experience_years' => $w['experience'],
+                    'is_available' => true,
+                    'is_verified' => $w['rating'] >= 4.7,
+                    'instant_booking' => $w['reviews'] > 20,
+                    'response_time' => ['< 1 hour', '< 2 hours', '< 4 hours', '< 1 day'][rand(0, 3)],
+                    'badges' => $w['rating'] >= 4.8 ? ['top_rated', 'verified'] : ($w['rating'] >= 4.5 ? ['verified'] : []),
+                    'rating' => $w['rating'],
+                    'total_reviews' => $w['reviews'],
+                ]);
 
-            $profile = WorkerProfile::create([
-                'user_id' => $user->id,
-                'category_id' => $category->id,
-                'phone' => $w['phone'],
-                'bio' => $w['bio'],
-                'price_per_unit' => $w['price'],
-                'price_unit' => $w['unit'],
-                'city' => $w['city'],
-                'experience_years' => $w['experience'],
-                'is_available' => true,
-                'is_verified' => $w['rating'] >= 4.7,
-                'instant_booking' => $w['reviews'] > 20,
-                'response_time' => ['< 1 hour', '< 2 hours', '< 4 hours', '< 1 day'][rand(0, 3)],
-                'badges' => $w['rating'] >= 4.8 ? ['top_rated', 'verified'] : ($w['rating'] >= 4.5 ? ['verified'] : []),
-                'rating' => $w['rating'],
-                'total_reviews' => $w['reviews'],
-            ]);
+                $client = User::firstOrCreate(
+                    ['email' => 'client.' . $w['email']],
+                    ['name' => 'Client ' . $w['name'], 'password' => Hash::make('password'), 'role' => 'client']
+                );
 
-            $client = User::create([
-                'name' => 'Client ' . $w['name'],
-                'email' => 'client.' . $w['email'],
-                'password' => Hash::make('password'),
-                'role' => 'client',
-            ]);
-
-            Review::create([
-                'user_id' => $client->id,
-                'worker_profile_id' => $profile->id,
-                'rating' => round($w['rating']),
-                'comment' => 'Great service! Very professional and reliable.',
-            ]);
+                Review::create([
+                    'user_id' => $client->id,
+                    'worker_profile_id' => $profile->id,
+                    'rating' => round($w['rating']),
+                    'comment' => 'Great service! Very professional and reliable.',
+                ]);
+            }
         }
 
         User::firstOrCreate(

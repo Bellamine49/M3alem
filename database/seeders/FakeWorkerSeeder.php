@@ -67,17 +67,13 @@ class FakeWorkerSeeder extends Seeder
             $category = Category::where('name', $w['cat'])->first();
             if (!$category) continue;
 
-            $existingCount = WorkerProfile::whereHas('user', fn($q) => $q->where('email', 'like', strtolower(str_replace(' ', '.', $w['name'])) . '@%'))->count();
-            if ($existingCount > 0) continue;
+            $email = strtolower(str_replace([' ', '\''], ['.', ''], $w['name'])) . '@mail.com';
 
-            $email = strtolower(str_replace(' ', '.', $w['name'])) . rand(1, 99) . '@mail.com';
-
-            $user = User::create([
-                'name' => $w['name'],
-                'email' => $email,
-                'password' => Hash::make('password'),
-                'role' => 'worker',
-            ]);
+            $user = User::firstOrCreate(
+                ['email' => $email],
+                ['name' => $w['name'], 'password' => Hash::make('password'), 'role' => 'worker']
+            );
+            if (!$user->wasRecentlyCreated) continue;
 
             $profile = WorkerProfile::create([
                 'user_id' => $user->id,
@@ -97,13 +93,11 @@ class FakeWorkerSeeder extends Seeder
                 'total_reviews' => $w['reviews'],
             ]);
 
-            $clientEmail = 'client.' . strtolower(str_replace(' ', '.', $w['name'])) . rand(1, 99) . '@mail.com';
-            $client = User::create([
-                'name' => 'Client ' . $w['name'],
-                'email' => $clientEmail,
-                'password' => Hash::make('password'),
-                'role' => 'client',
-            ]);
+            $clientEmail = 'client.' . strtolower(str_replace([' ', '\''], ['.', ''], $w['name'])) . '@mail.com';
+            $client = User::firstOrCreate(
+                ['email' => $clientEmail],
+                ['name' => 'Client ' . $w['name'], 'password' => Hash::make('password'), 'role' => 'client']
+            );
 
             Review::create([
                 'user_id' => $client->id,
