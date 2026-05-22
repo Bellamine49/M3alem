@@ -7,6 +7,11 @@
     <title>@yield('title', 'M3alem') - Find Trusted Local Professionals</title>
     <meta name="description" content="@yield('meta_description', 'Connect with verified local professionals for all your home service needs. Quality work, fair prices, verified workers.')">
     <link rel="icon" type="image/png" href="/logo_M3alem_transparent.png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/logo_M3alem_transparent.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="M3alem">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
@@ -254,6 +259,11 @@
         </div>
     </footer>
 
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    </script>
     <script>
         function app() {
             return {
